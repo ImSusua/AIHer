@@ -1,0 +1,15 @@
+{
+  "name": "Compose App Template",
+  "version": "1.0.0",
+  "description": "Jetpack Compose应用模板",
+  "minSdk": 24,
+  "targetSdk": 34,
+  "template_type": "compose_app",
+  "dependencies": [
+    "androidx.compose.ui:ui",
+    "androidx.compose.material3:material3",
+    "androidx.compose.ui:ui-tooling-preview",
+    "androidx.activity:activity-compose",
+    "androidx.navigation:navigation-compose"
+  ]
+}

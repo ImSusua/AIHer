@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- 网络权限 -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+
+    <!-- 存储权限 -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="29" />
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" />
+
+    <!-- 安装APK -->
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+
+    <!-- 通知 -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <!-- 前台服务 -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
+
+    <!-- 系统级权限 -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS"
+        tools:ignore="ProtectedPermissions" />
+
+    <!-- 基础功能 -->
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+
+    <!-- 摄像头 -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
+
+    <!-- 位置 -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+    <!-- 电话和短信 -->
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-feature android:name="android.hardware.telephony" android:required="false" />
+
+    <!-- 日历 -->
+    <uses-permission android:name="android.permission.READ_CALENDAR" />
+    <uses-permission android:name="android.permission.WRITE_CALENDAR" />
+
+    <!-- 联系人 -->
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+
+    <!-- 录音 -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
+    <!-- 闹钟 -->
+    <uses-permission android:name="android.permission.SET_ALARM" />
+
+    <!-- 壁纸 -->
+    <uses-permission android:name="android.permission.SET_WALLPAPER" />
+
+    <!-- 查询其他应用 -->
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent>
+        <package android:name="com.tencent.mm" />
+        <package android:name="com.tencent.mobileqq" />
+        <package android:name="com.eg.android.AlipayGphone" />
+    </queries>
+
+    <application
+        android:name=".AIHerApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="AIHer"
+        android:roundIcon="@mipmap/ic_launcher"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.AIHer"
+        android:usesCleartextTraffic="true"
+        tools:targetApi="34">
+
+        <!-- 后台任务服务 -->
+        <service
+            android:name=".service.AIBackgroundService"
+            android:exported="false"
+            android:foregroundServiceType="dataSync" />
+
+        <!-- 无障碍服务 -->
+        <service
+            android:name=".service.AIAccessibilityService"
+            android:exported="true"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+            </intent-filter>
+            <meta-data
+                android:name="android.accessibilityservice"
+                android:resource="@xml/accessibility_service_config" />
+        </service>
+
+        <!-- 认证回调Activity -->
+        <activity
+            android:name=".auth.AuthCallbackActivity"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:theme="@style/Theme.AIHer">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:scheme="com.aiher.app"
+                    android:host="authing"
+                    android:path="/callback" />
+            </intent-filter>
+        </activity>
+
+        <!-- 启动页 / 认证门 -->
+        <activity
+            android:name=".auth.AuthGateActivity"
+            android:exported="true"
+            android:theme="@style/Theme.AIHer">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:scheme="com.aiher.app"
+                    android:host="authing"
+                    android:path="/logout" />
+            </intent-filter>
+        </activity>
+
+        <!-- AI对话界面 -->
+        <activity
+            android:name=".ai.AiTextChatActivity"
+            android:exported="true"
+            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
+            android:theme="@style/Theme.AIHer"
+            android:windowSoftInputMode="adjustResize" />
+
+        <!-- AI设置 -->
+        <activity
+            android:name=".ai.AiSettingsActivity"
+            android:exported="false"
+            android:label="AI 配置"
+            android:theme="@style/Theme.AIHer" />
+
+        <!-- 用户设置 -->
+        <activity
+            android:name=".settings.UserSettingsActivity"
+            android:exported="false"
+            android:label="用户设置"
+            android:theme="@style/Theme.AIHer" />
+
+        <!-- 升级Plus -->
+        <activity
+            android:name=".settings.PlusUpgradeActivity"
+            android:exported="false"
+            android:label="升级 Plus"
+            android:theme="@style/Theme.AIHer" />
+
+        <!-- 功能商店 -->
+        <activity
+            android:name=".market.FeatureStoreActivity"
+            android:exported="false"
+            android:label="功能商店"
+            android:theme="@style/Theme.AIHer" />
+
+        <!-- 项目详情 -->
+        <activity
+            android:name=".project.ProjectDetailActivity"
+            android:exported="false"
+            android:label="项目详情"
+            android:theme="@style/Theme.AIHer" />
+
+        <!-- 文件提供者 - 用于APK安装 -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+    </application>
+
+</manifest>

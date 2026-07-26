@@ -1,0 +1,10 @@
+{
+  "app_metadata": {
+    "name": "AIHer",
+    "version": "1.0.0",
+    "description": "AI驱动的Android应用生成器",
+    "supported_models": ["gpt-4", "gpt-4-turbo", "gpt-3.5-turbo", "claude-3-5-sonnet", "claude-3-opus", "gemini-pro"],
+    "default_model": "gpt-4",
+    "features": ["ai_chat", "app_generation", "app_market", "project_management"]
+  }
+}

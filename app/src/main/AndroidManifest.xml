@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.perhaps.her">
+
+    <!-- Permissions -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
+    <uses-permission android:name="android.permission.SET_ALARM" />
+    <uses-permission android:name="android.permission.SET_WALLPAPER" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.READ_CALENDAR" />
+    <uses-permission android:name="android.permission.WRITE_CALENDAR" />
+    <uses-permission android:name="android.permission.READ_CALL_LOG" />
+
+    <!-- Features -->
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
+    <uses-feature android:name="android.hardware.camera.front" android:required="false" />
+    <uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
+    <uses-feature android:name="android.hardware.telephony" android:required="false" />
+
+    <application
+        android:name=".HerApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Her"
+        android:usesCleartextTraffic="true"
+        android:extractNativeLibs="true">
+
+        <!-- Main Activity -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:windowSoftInputMode="adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- Auth Activities -->
+        <activity
+            android:name=".auth.AuthGateActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Her" />
+
+        <activity
+            android:name=".auth.AuthCallbackActivity"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:theme="@style/Theme.Her">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="authing" android:host="callback" />
+            </intent-filter>
+        </activity>
+
+        <!-- AI Activities -->
+        <activity
+            android:name=".ai.AiTextChatActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:exported="true"
+            android:theme="@style/Theme.Her" />
+
+        <activity
+            android:name=".ai.AiSettingsActivity"
+            android:label="AI 配置"
+            android:exported="false"
+            android:theme="@style/Theme.Her" />
+
+        <activity
+            android:name=".ai.UserSettingsActivity"
+            android:label="用户设置"
+            android:exported="false"
+            android:theme="@style/Theme.Her" />
+
+        <activity
+            android:name=".ai.PlusUpgradeActivity"
+            android:label="升级 Plus"
+            android:exported="false"
+            android:theme="@style/Theme.Her" />
+
+        <activity
+            android:name=".ai.FeatureStoreActivity"
+            android:label="功能商店"
+            android:exported="false"
+            android:theme="@style/Theme.Her" />
+
+        <activity
+            android:name=".ai.AiPluginsActivity"
+            android:label="插件"
+            android:exported="false"
+            android:theme="@style/Theme.Her" />
+
+        <activity
+            android:name=".ai.MacControlActivity"
+            android:label="连接 Mac"
+            android:launchMode="singleTask"
+            android:exported="false"
+            android:theme="@style/Theme.Her" />
+
+        <activity
+            android:name=".ai.MacQrCaptureActivity"
+            android:screenOrientation="fullSensor"
+            android:stateNotNeeded="true"
+            android:exported="false"
+            android:theme="@style/Theme.Her" />
+
+        <activity
+            android:name=".ai.RootVmFridaActivity"
+            android:label="Root VM · Frida"
+            android:exported="false"
+            android:theme="@style/Theme.Her" />
+
+        <activity
+            android:name=".ai.AiFileDiffEditorActivity"
+            android:label="文件更改"
+            android:exported="false"
+            android:theme="@style/Theme.Her" />
+
+        <activity
+            android:name=".ai.FullScreenWebActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Her" />
+
+        <activity
+            android:name=".ai.StubActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Her" />
+
+        <!-- Barcode Scanner -->
+        <activity
+            android:name="com.journeyapps.barcodescanner.CaptureActivity"
+            android:screenOrientation="sensorLandscape"
+            android:stateNotNeeded="true"
+            android:theme="@style/zxing_CaptureTheme"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+
+        <!-- Services -->
+        <service
+            android:name=".ai.HerAccessibilityService"
+            android:exported="true"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+            </intent-filter>
+            <meta-data
+                android:name="android.accessibilityservice"
+                android:resource="@xml/her_accessibility_service" />
+        </service>
+
+        <service
+            android:name=".ai.HerBackgroundTaskService"
+            android:exported="false"
+            android:foregroundServiceType="dataSync" />
+
+        <!-- File Provider -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+        <!-- Startup Initializer -->
+        <provider
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="${applicationId}.androidx-startup"
+            android:exported="false">
+            <meta-data
+                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+                android:value="androidx.startup" />
+            <meta-data
+                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+                android:value="androidx.startup" />
+        </provider>
+
+        <!-- Profile Installer Receiver -->
+        <receiver
+            android:name="androidx.profileinstaller.ProfileInstallReceiver"
+            android:exported="true"
+            android:permission="android.permission.DUMP">
+            <intent-filter>
+                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
+                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
+                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
+                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
+            </intent-filter>
+        </receiver>
+
+        <!-- Shell Provider -->
+        <provider
+            android:name="com.SecShell.SecShell.CP"
+            android:authorities="${applicationId}.CP"
+            android:initOrder="2147483647"
+            android:exported="false" />
+
+    </application>
+
+</manifest>

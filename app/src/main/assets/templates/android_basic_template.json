@@ -1,0 +1,12 @@
+{
+  "name": "Android App Template",
+  "version": "1.0.0",
+  "description": "基础Android应用模板",
+  "minSdk": 24,
+  "targetSdk": 34,
+  "template_type": "android_basic",
+  "files": {
+    "MainActivity.kt": "package com.aiher.template\n\nimport android.os.Bundle\nimport androidx.activity.ComponentActivity\nimport androidx.activity.compose.setContent\nimport androidx.compose.foundation.layout.*\nimport androidx.compose.material3.*\nimport androidx.compose.runtime.*\nimport androidx.compose.ui.Alignment\nimport androidx.compose.ui.Modifier\nimport androidx.compose.ui.unit.dp\n\nclass MainActivity : ComponentActivity() {\n    override fun onCreate(savedInstanceState: Bundle?) {\n        super.onCreate(savedInstanceState)\n        setContent {\n            MaterialTheme {\n                Surface(\n                    modifier = Modifier.fillMaxSize(),\n                    color = MaterialTheme.colorScheme.background\n                ) {\n                    Box(\n                        modifier = Modifier.fillMaxSize(),\n                        contentAlignment = Alignment.Center\n                    ) {\n                        Text(\"Hello AIHer!\")\n                    }\n                }\n            }\n        }\n    }\n}",
+    "AndroidManifest.xml": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<manifest xmlns:android=\"http://schemas.android.com/apk/res/android\"\n    package=\"com.aiher.template\">\n    <application\n        android:allowBackup=\"true\"\n        android:label=\"@string/app_name\"\n        android:theme=\"@style/Theme.App\">\n        <activity\n            android:name=\".MainActivity\"\n            android:exported=\"true\">\n            <intent-filter>\n                <action android:name=\"android.intent.action.MAIN\" />\n                <category android:name=\"android.intent.category.LAUNCHER\" />\n            </intent-filter>\n        </activity>\n    </application>\n</manifest>"
+  }
+}

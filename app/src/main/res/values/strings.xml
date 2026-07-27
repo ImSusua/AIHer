@@ -7,9 +7,6 @@
     <string name="feature_store_title">功能商店</string>
     <string name="plus_upgrade_title">升级 Plus</string>
     <string name="auth_gate_title">AIHer</string>
-    <string name="auth_login">登录</string>
-    <string name="auth_register">注册</string>
-    <string name="auth_guest">游客模式</string>
     <string name="chat_hint">描述你想要创建的应用...</string>
     <string name="chat_send">发送</string>
     <string name="chat_generating">AI 正在生成应用...</string>

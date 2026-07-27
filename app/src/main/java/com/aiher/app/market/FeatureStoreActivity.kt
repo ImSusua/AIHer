@@ -6,7 +6,6 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -134,7 +133,9 @@ fun FeatureStoreScreen(onBack: () -> Unit) {
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 items(filteredApps) { app ->
-                    MarketAppCard(app)
+                    MarketAppCard(app, onClick = {
+                        // 可以在后续添加详情页
+                    })
                 }
             }
         }
@@ -142,11 +143,11 @@ fun FeatureStoreScreen(onBack: () -> Unit) {
 }
 
 @Composable
-fun MarketAppCard(app: MarketApp) {
+fun MarketAppCard(app: MarketApp, onClick: () -> Unit = {}) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable {},
+            .clickable { onClick() },
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(containerColor = SurfaceLight),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)

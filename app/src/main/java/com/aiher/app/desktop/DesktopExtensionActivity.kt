@@ -40,6 +40,7 @@ class DesktopExtensionActivity : ComponentActivity() {
 fun DesktopExtensionScreen(onBack: () -> Unit) {
     var isConnecting by remember { mutableStateOf(false) }
     var isConnected by remember { mutableStateOf(false) }
+    val scope = rememberCoroutineScope()
 
     Scaffold(
         topBar = {
@@ -108,7 +109,7 @@ fun DesktopExtensionScreen(onBack: () -> Unit) {
             Button(
                 onClick = {
                     isConnecting = true
-                    kotlinx.coroutines.MainScope().launch {
+                    scope.launch {
                         kotlinx.coroutines.delay(2000)
                         isConnecting = false
                         isConnected = true

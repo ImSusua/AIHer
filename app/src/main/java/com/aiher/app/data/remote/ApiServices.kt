@@ -43,16 +43,3 @@ interface MarketApi {
         @Query("q") query: String
     ): Response<List<com.aiher.app.data.model.MarketApp>>
 }
-
-interface AuthApi {
-
-    @POST("api/auth/login")
-    suspend fun login(
-        @Body body: Map<String, String>
-    ): Response<com.aiher.app.data.model.User>
-
-    @POST("api/auth/register")
-    suspend fun register(
-        @Body body: Map<String, String>
-    ): Response<com.aiher.app.data.model.User>
-}

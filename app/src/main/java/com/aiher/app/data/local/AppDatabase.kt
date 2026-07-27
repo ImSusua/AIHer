@@ -8,7 +8,7 @@ import androidx.room.*
         com.aiher.app.data.local.MessageEntity::class,
         com.aiher.app.data.local.AppEntity::class
     ],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -30,7 +30,7 @@ data class ProjectEntity(
     val status: String
 )
 
-@Entity(tableName = "messages")
+@Entity(tableName = "messages", indices = [androidx.room.Index("projectId")])
 data class MessageEntity(
     @PrimaryKey val id: String,
     val projectId: String,

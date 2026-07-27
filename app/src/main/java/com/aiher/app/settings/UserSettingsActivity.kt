@@ -157,7 +157,7 @@ fun UserSettingsScreen(onBack: () -> Unit) {
                 }
             }
 
-            // 退出登录
+            // 返回主页
             OutlinedButton(
                 onClick = onBack,
                 modifier = Modifier
@@ -166,7 +166,7 @@ fun UserSettingsScreen(onBack: () -> Unit) {
                 shape = RoundedCornerShape(12.dp),
                 colors = ButtonDefaults.outlinedButtonColors(contentColor = ErrorRed)
             ) {
-                Text("退出登录", fontSize = 16.sp, fontWeight = FontWeight.Medium)
+                Text("返回主页", fontSize = 16.sp, fontWeight = FontWeight.Medium)
             }
         }
     }

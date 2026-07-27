@@ -49,6 +49,7 @@ class McpManagerActivity : ComponentActivity() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun McpManagerScreen(onBack: () -> Unit) {
+    val context = androidx.compose.ui.platform.LocalContext.current
     val servers = remember {
         listOf(
             McpServer("文件系统", "读写本地文件和目录", McpStatus.CONNECTED, McpType.SERVER),
@@ -77,7 +78,7 @@ fun McpManagerScreen(onBack: () -> Unit) {
                     }
                 },
                 actions = {
-                    IconButton(onClick = {}) {
+                    IconButton(onClick = { android.widget.Toast.makeText(context, "MCP Server 添加功能即将上线", android.widget.Toast.LENGTH_SHORT).show() }) {
                         Icon(Icons.Filled.Add, "添加", tint = TextOnPrimary)
                     }
                 },

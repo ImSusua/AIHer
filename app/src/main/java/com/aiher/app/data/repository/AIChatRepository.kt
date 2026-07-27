@@ -5,6 +5,7 @@ import com.aiher.app.data.model.*
 import com.aiher.app.data.remote.AIChatApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
+import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -40,7 +41,7 @@ class AIChatRepository @Inject constructor(
                 ChatCompletionMessage(role = "system", content = systemPrompt)
             )
             history.forEach { msg ->
-                apiMessages.add(ChatCompletionMessage(role = msg.role.lowercase(), content = msg.content))
+                apiMessages.add(ChatCompletionMessage(role = msg.role.lowercase(Locale.ROOT), content = msg.content))
             }
 
             // 获取配置
@@ -127,7 +128,7 @@ class AIChatRepository @Inject constructor(
         return messageDao.getMessagesByProject(projectId).map { entity ->
             ChatMessage(
                 id = entity.id,
-                role = MessageRole.valueOf(entity.role),
+                role = runCatching { MessageRole.valueOf(entity.role) }.getOrDefault(MessageRole.ASSISTANT),
                 content = entity.content,
                 timestamp = entity.timestamp,
                 metadata = MessageMetadata(
@@ -139,7 +140,7 @@ class AIChatRepository @Inject constructor(
     }
 
     private fun generatePackageName(appName: String): String {
-        val sanitized = appName.lowercase()
+        val sanitized = appName.lowercase(Locale.ROOT)
             .replace(Regex("[^a-z0-9]"), "")
             .take(20)
         return "com.aiher.generated.$sanitized"

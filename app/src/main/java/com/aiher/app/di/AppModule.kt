@@ -5,7 +5,6 @@ import androidx.room.Room
 import com.aiher.app.data.local.AppDatabase
 import com.aiher.app.data.local.SettingsDataStore
 import com.aiher.app.data.remote.AIChatApi
-import com.aiher.app.data.remote.AuthApi
 import com.aiher.app.data.remote.MarketApi
 import com.aiher.app.data.repository.AIChatRepository
 import com.aiher.app.data.repository.MarketRepository
@@ -60,17 +59,6 @@ object AppModule {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(MarketApi::class.java)
-    }
-
-    @Provides
-    @Singleton
-    fun provideAuthApi(okHttpClient: OkHttpClient): AuthApi {
-        return Retrofit.Builder()
-            .baseUrl("https://api.aibox.asia/")
-            .client(okHttpClient)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-            .create(AuthApi::class.java)
     }
 
     @Provides

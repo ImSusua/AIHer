@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.aiher.app.ui.theme.*
 import dagger.hilt.android.AndroidEntryPoint
+import android.view.ViewGroup
 
 data class WebAppTemplate(
     val name: String,
@@ -88,12 +89,14 @@ fun WebAppScreen(onBack: () -> Unit) {
         )
     }
 
-    if (selectedTemplate != null) {
+    val selected = selectedTemplate
+    if (selected != null) {
         // WebView预览
+        var webViewRef by remember { mutableStateOf<WebView?>(null) }
         Scaffold(
             topBar = {
                 TopAppBar(
-                    title = { Text(selectedTemplate!!.name, color = TextOnPrimary, fontWeight = FontWeight.Bold) },
+                    title = { Text(selected.name, color = TextOnPrimary, fontWeight = FontWeight.Bold) },
                     navigationIcon = {
                         IconButton(onClick = { selectedTemplate = null }) {
                             Icon(Icons.Filled.ArrowBack, "返回", tint = TextOnPrimary)
@@ -107,15 +110,36 @@ fun WebAppScreen(onBack: () -> Unit) {
                 factory = { ctx ->
                     WebView(ctx).apply {
                         settings.javaScriptEnabled = true
+                        settings.domStorageEnabled = true
+                        settings.allowFileAccess = true
+                        settings.allowContentAccess = true
+                        settings.mixedContentMode = android.webkit.WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
+                        settings.cacheMode = android.webkit.WebSettings.LOAD_DEFAULT
+                        settings.databaseEnabled = true
                         webViewClient = WebViewClient()
                         webChromeClient = WebChromeClient()
-                        loadDataWithBaseURL(null, selectedTemplate!!.htmlPreview, "text/html", "UTF-8", null)
+                        loadDataWithBaseURL(null, selected.htmlPreview, "text/html", "UTF-8", null)
+                        webViewRef = this
+                    }
+                },
+                update = { webview ->
+                    if (webview.url == null) {
+                        webview.loadDataWithBaseURL(null, selected.htmlPreview, "text/html", "UTF-8", null)
                     }
                 },
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(padding)
             )
+            DisposableEffect(selected) {
+                onDispose {
+                    webViewRef?.let { wv ->
+                        (wv.parent as? ViewGroup)?.removeView(wv)
+                        wv.destroy()
+                    }
+                    webViewRef = null
+                }
+            }
         }
     } else {
         // 模板列表

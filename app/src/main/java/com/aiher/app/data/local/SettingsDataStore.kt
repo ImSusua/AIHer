@@ -17,9 +17,6 @@ class SettingsDataStore(private val context: Context) {
         private val KEY_MODEL_NAME = stringPreferencesKey("model_name")
         private val KEY_TEMPERATURE = floatPreferencesKey("temperature")
         private val KEY_MAX_TOKENS = intPreferencesKey("max_tokens")
-        private val KEY_IS_LOGGED_IN = booleanPreferencesKey("is_logged_in")
-        private val KEY_USER_ID = stringPreferencesKey("user_id")
-        private val KEY_USER_NAME = stringPreferencesKey("user_name")
         private val KEY_IS_PLUS = booleanPreferencesKey("is_plus")
         private val KEY_THEME_MODE = intPreferencesKey("theme_mode")
         private val KEY_AUTO_INSTALL = booleanPreferencesKey("auto_install")
@@ -33,9 +30,6 @@ class SettingsDataStore(private val context: Context) {
     val maxTokens: Flow<Int> = context.dataStore.data.map { it[KEY_MAX_TOKENS] ?: 4096 }
 
     // 用户状态
-    val isLoggedIn: Flow<Boolean> = context.dataStore.data.map { it[KEY_IS_LOGGED_IN] ?: false }
-    val userId: Flow<String> = context.dataStore.data.map { it[KEY_USER_ID] ?: "" }
-    val userName: Flow<String> = context.dataStore.data.map { it[KEY_USER_NAME] ?: "" }
     val isPlus: Flow<Boolean> = context.dataStore.data.map { it[KEY_IS_PLUS] ?: true }
 
     // 应用设置
@@ -61,24 +55,6 @@ class SettingsDataStore(private val context: Context) {
 
     suspend fun saveMaxTokens(tokens: Int) {
         context.dataStore.edit { it[KEY_MAX_TOKENS] = tokens }
-    }
-
-    suspend fun saveLoginState(userId: String, userName: String, isPlus: Boolean = false) {
-        context.dataStore.edit {
-            it[KEY_IS_LOGGED_IN] = true
-            it[KEY_USER_ID] = userId
-            it[KEY_USER_NAME] = userName
-            it[KEY_IS_PLUS] = isPlus
-        }
-    }
-
-    suspend fun clearLoginState() {
-        context.dataStore.edit {
-            it[KEY_IS_LOGGED_IN] = false
-            it[KEY_USER_ID] = ""
-            it[KEY_USER_NAME] = ""
-            it[KEY_IS_PLUS] = false
-        }
     }
 
     suspend fun setThemeMode(mode: Int) {

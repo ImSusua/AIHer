@@ -19,6 +19,7 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -99,42 +100,41 @@ fun AiChatScreen(
     onNavigateToDesktop: () -> Unit,
     onNavigateToProjects: () -> Unit
 ) {
-    var messages by remember { mutableStateOf(listOf<ChatMessage>()) }
-    var inputText by remember { mutableStateOf("") }
+    var messages by rememberSaveable { mutableStateOf(listOf<ChatMessage>()) }
+    var inputText by rememberSaveable { mutableStateOf("") }
     var isGenerating by remember { mutableStateOf(false) }
-    var showSideMenu by remember { mutableStateOf(false) }
+    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val listState = rememberLazyListState()
-    val scope = rememberCoroutineScope()
+    val coroutineScope = rememberCoroutineScope()
 
-    // 初始欢迎消息
+    // 初始欢迎消息 - 仅在消息为空时初始化，避免旋转后丢失对话
     LaunchedEffect(Unit) {
-        messages = listOf(
-            ChatMessage(
-                role = MessageRole.ASSISTANT,
-                content = "你好！我是 AIHer，你的AI应用开发助手。\n\n你可以直接描述你想要创建的应用，我会帮你生成完整的Android应用。\n\n例如：\n- \"帮我创建一个计算器应用\"\n- \"制作一个番茄钟应用\"\n- \"生成一个2048游戏\"\n\n你想创建什么应用？"
+        if (messages.isEmpty()) {
+            messages = listOf(
+                ChatMessage(
+                    role = MessageRole.ASSISTANT,
+                    content = "你好！我是 AIHer，你的AI应用开发助手。\n\n你可以直接描述你想要创建的应用，我会帮你生成完整的Android应用。\n\n例如：\n- \"帮我创建一个计算器应用\"\n- \"制作一个番茄钟应用\"\n- \"生成一个2048游戏\"\n\n你想创建什么应用？"
+                )
             )
-        )
+        }
     }
 
     ModalNavigationDrawer(
-        drawerState = rememberDrawerState(initialValue = DrawerValue.Closed),
+        drawerState = drawerState,
         drawerContent = {
-            if (showSideMenu) {
-                SideMenuContent(
-                    onNavigateToSettings = onNavigateToSettings,
-                    onNavigateToUserSettings = onNavigateToUserSettings,
-                    onNavigateToFeatureStore = onNavigateToFeatureStore,
-                    onNavigateToPlus = onNavigateToPlus,
-                    onNavigateToMcp = onNavigateToMcp,
-                    onNavigateToWebApp = onNavigateToWebApp,
-                    onNavigateToTerminal = onNavigateToTerminal,
-                    onNavigateToDesktop = onNavigateToDesktop,
-                    onNavigateToProjects = onNavigateToProjects,
-                    onClose = { showSideMenu = false }
-                )
-            }
-        },
-        gesturesEnabled = showSideMenu
+            SideMenuContent(
+                onNavigateToSettings = onNavigateToSettings,
+                onNavigateToUserSettings = onNavigateToUserSettings,
+                onNavigateToFeatureStore = onNavigateToFeatureStore,
+                onNavigateToPlus = onNavigateToPlus,
+                onNavigateToMcp = onNavigateToMcp,
+                onNavigateToWebApp = onNavigateToWebApp,
+                onNavigateToTerminal = onNavigateToTerminal,
+                onNavigateToDesktop = onNavigateToDesktop,
+                onNavigateToProjects = onNavigateToProjects,
+                onClose = { coroutineScope.launch { drawerState.close() } }
+            )
+        }
     ) {
         Scaffold(
             topBar = {
@@ -150,7 +150,7 @@ fun AiChatScreen(
                         containerColor = Purple500
                     ),
                     navigationIcon = {
-                        IconButton(onClick = { showSideMenu = !showSideMenu }) {
+                        IconButton(onClick = { coroutineScope.launch { drawerState.open() } }) {
                             Icon(
                                 Icons.Filled.Menu,
                                 contentDescription = "菜单",
@@ -219,7 +219,7 @@ fun AiChatScreen(
                             inputText = ""
                             isGenerating = true
 
-                            scope.launch {
+                            coroutineScope.launch {
                                 // 自动滚动到底部
                                 listState.animateScrollToItem(messages.size)
 
@@ -436,6 +436,7 @@ fun SideMenuContent(
     onNavigateToProjects: () -> Unit,
     onClose: () -> Unit
 ) {
+    val context = androidx.compose.ui.platform.LocalContext.current
     ModalDrawerSheet(
         modifier = Modifier.width(300.dp),
         drawerContainerColor = SurfaceLight
@@ -497,7 +498,7 @@ fun SideMenuContent(
 
         Divider(modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp))
 
-        MenuItem(Icons.Outlined.Info, "关于", "AIHer v1.0.0 · 免费") {}
+        MenuItem(Icons.Outlined.Info, "关于", "AIHer v1.0.0 · 免费") { android.widget.Toast.makeText(context, "AIHer v1.0.0\nAI驱动的应用生成器\n全部功能 · 永久免费", android.widget.Toast.LENGTH_LONG).show() }
     }
 }
 
@@ -532,7 +533,7 @@ private fun MenuItem(
 // ============ 模拟AI响应 ============
 
 private fun generateMockResponse(userInput: String): String {
-    val input = userInput.lowercase()
+    val input = userInput.lowercase(java.util.Locale.ROOT)
 
     return when {
         input.contains("计算器") || input.contains("calculator") -> """

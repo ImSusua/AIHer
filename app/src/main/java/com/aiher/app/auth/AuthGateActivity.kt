@@ -6,11 +6,12 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -18,7 +19,6 @@ import androidx.compose.ui.unit.sp
 import com.aiher.app.ui.theme.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class AuthGateActivity : ComponentActivity() {
@@ -27,7 +27,6 @@ class AuthGateActivity : ComponentActivity() {
         setContent {
             AIHerTheme {
                 SplashScreen {
-                    // 直接进入主界面 - 无需登录
                     startActivity(Intent(this, com.aiher.app.ai.AiTextChatActivity::class.java))
                     finish()
                 }
@@ -38,13 +37,9 @@ class AuthGateActivity : ComponentActivity() {
 
 @Composable
 fun SplashScreen(onFinish: () -> Unit) {
-    val scope = rememberCoroutineScope()
-
     LaunchedEffect(Unit) {
-        scope.launch {
-            delay(1500) // 显示启动画面1.5秒
-            onFinish()
-        }
+        delay(1200)
+        onFinish()
     }
 
     Box(
@@ -56,9 +51,24 @@ fun SplashScreen(onFinish: () -> Unit) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            Box(
+                modifier = Modifier
+                    .size(80.dp)
+                    .clip(CircleShape)
+                    .background(TextOnPrimary.copy(alpha = 0.15f)),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = "AI",
+                    fontSize = 32.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = TextOnPrimary
+                )
+            }
+            Spacer(modifier = Modifier.height(16.dp))
             Text(
                 text = "AIHer",
-                fontSize = 48.sp,
+                fontSize = 40.sp,
                 fontWeight = FontWeight.Bold,
                 color = TextOnPrimary,
                 textAlign = TextAlign.Center
@@ -75,13 +85,6 @@ fun SplashScreen(onFinish: () -> Unit) {
                 color = TextOnPrimary,
                 strokeWidth = 3.dp,
                 modifier = Modifier.size(32.dp)
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = "全部功能 · 永久免费",
-                fontSize = 14.sp,
-                color = SuccessGreen,
-                fontWeight = FontWeight.Medium
             )
         }
     }

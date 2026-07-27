@@ -88,6 +88,9 @@ fun TerminalScreen(onBack: () -> Unit) {
             else -> listOf("命令未找到: $cmd", "输入 help 查看可用命令")
         }
         output = output + "aiher@localhost:~\$ $cmd" + result + ""
+        if (output.size > 500) {
+            output = output.takeLast(300)
+        }
     }
 
     Scaffold(

@@ -4,6 +4,7 @@ import com.aiher.app.data.local.AppDao
 import com.aiher.app.data.local.ProjectDao
 import com.aiher.app.data.local.ProjectEntity
 import com.aiher.app.data.model.*
+import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -52,7 +53,7 @@ class ProjectRepository @Inject constructor(
     }
 
     private fun generatePackageName(name: String): String {
-        val sanitized = name.lowercase()
+        val sanitized = name.lowercase(Locale.ROOT)
             .replace(Regex("[^a-z0-9]"), "")
             .take(20)
         return "com.aiher.project.$sanitized"
@@ -66,7 +67,7 @@ class ProjectRepository @Inject constructor(
             packageName = packageName,
             createdAt = createdAt,
             updatedAt = updatedAt,
-            status = ProjectStatus.valueOf(status)
+            status = runCatching { ProjectStatus.valueOf(status) }.getOrDefault(ProjectStatus.DRAFT)
         )
     }
 
@@ -90,7 +91,7 @@ class ProjectRepository @Inject constructor(
             packageName = packageName,
             apkPath = apkPath,
             iconUrl = iconUrl,
-            status = AppStatus.valueOf(status),
+            status = runCatching { AppStatus.valueOf(status) }.getOrDefault(AppStatus.GENERATING),
             createdAt = createdAt,
             updatedAt = updatedAt
         )

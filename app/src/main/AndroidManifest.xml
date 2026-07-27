@@ -107,23 +107,6 @@
                 android:resource="@xml/accessibility_service_config" />
         </service>
 
-        <!-- 认证回调Activity -->
-        <activity
-            android:name=".auth.AuthCallbackActivity"
-            android:exported="true"
-            android:launchMode="singleTask"
-            android:theme="@style/Theme.AIHer">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <data
-                    android:scheme="com.aiher.app"
-                    android:host="authing"
-                    android:path="/callback" />
-            </intent-filter>
-        </activity>
-
         <!-- 启动页 / 认证门 -->
         <activity
             android:name=".auth.AuthGateActivity"
@@ -132,15 +115,6 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <data
-                    android:scheme="com.aiher.app"
-                    android:host="authing"
-                    android:path="/logout" />
             </intent-filter>
         </activity>
 
@@ -157,6 +131,7 @@
             android:name=".ai.AiSettingsActivity"
             android:exported="false"
             android:label="AI 配置"
+            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
             android:theme="@style/Theme.AIHer" />
 
         <!-- 用户设置 -->
@@ -164,6 +139,7 @@
             android:name=".settings.UserSettingsActivity"
             android:exported="false"
             android:label="用户设置"
+            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
             android:theme="@style/Theme.AIHer" />
 
         <!-- 升级Plus -->
@@ -171,6 +147,7 @@
             android:name=".settings.PlusUpgradeActivity"
             android:exported="false"
             android:label="升级 Plus"
+            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
             android:theme="@style/Theme.AIHer" />
 
         <!-- 功能商店 -->
@@ -178,6 +155,7 @@
             android:name=".market.FeatureStoreActivity"
             android:exported="false"
             android:label="功能商店"
+            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
             android:theme="@style/Theme.AIHer" />
 
         <!-- 项目详情 -->
@@ -185,6 +163,7 @@
             android:name=".project.ProjectDetailActivity"
             android:exported="false"
             android:label="项目详情"
+            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
             android:theme="@style/Theme.AIHer" />
 
         <!-- MCP / Skill 管理 -->
@@ -192,6 +171,7 @@
             android:name=".mcp.McpManagerActivity"
             android:exported="false"
             android:label="MCP / Skill"
+            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
             android:theme="@style/Theme.AIHer" />
 
         <!-- Web App 生成 -->
@@ -199,6 +179,7 @@
             android:name=".webapp.WebAppActivity"
             android:exported="false"
             android:label="Web App"
+            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
             android:theme="@style/Theme.AIHer" />
 
         <!-- 终端 -->
@@ -206,6 +187,7 @@
             android:name=".terminal.TerminalActivity"
             android:exported="false"
             android:label="Terminal"
+            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
             android:theme="@style/Theme.AIHer" />
 
         <!-- 桌面扩展 -->
@@ -213,6 +195,7 @@
             android:name=".desktop.DesktopExtensionActivity"
             android:exported="false"
             android:label="桌面扩展"
+            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
             android:theme="@style/Theme.AIHer" />
 
         <!-- 文件提供者 - 用于APK安装 -->

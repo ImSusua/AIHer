@@ -1,16 +1,19 @@
 package com.aiher.app.data.model
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.parcelize.Parcelize
 
 // ============ AI对话相关模型 ============
 
+@Parcelize
 data class ChatMessage(
     val id: String = java.util.UUID.randomUUID().toString(),
     val role: MessageRole,
     val content: String,
     val timestamp: Long = System.currentTimeMillis(),
     val metadata: MessageMetadata? = null
-)
+) : Parcelable
 
 enum class MessageRole {
     @SerializedName("user") USER,
@@ -18,12 +21,13 @@ enum class MessageRole {
     @SerializedName("system") SYSTEM
 }
 
+@Parcelize
 data class MessageMetadata(
     val isGenerating: Boolean = false,
     val generatedApkPath: String? = null,
     val appName: String? = null,
     val appDescription: String? = null
-)
+) : Parcelable
 
 // ============ AI模型配置 ============
 

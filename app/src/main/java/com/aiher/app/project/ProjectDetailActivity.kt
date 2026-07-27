@@ -115,6 +115,7 @@ fun ProjectDetailScreen(onBack: () -> Unit) {
 
 @Composable
 fun ProjectCard(app: GeneratedApp) {
+    val context = androidx.compose.ui.platform.LocalContext.current
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
@@ -166,7 +167,7 @@ fun ProjectCard(app: GeneratedApp) {
                 }
                 AppStatus.COMPLETED -> {
                     FilledIconButton(
-                        onClick = {},
+                        onClick = { android.widget.Toast.makeText(context, "APK 文件正在准备中", android.widget.Toast.LENGTH_SHORT).show() },
                         modifier = Modifier.size(40.dp),
                         shape = RoundedCornerShape(8.dp),
                         colors = IconButtonDefaults.filledIconButtonColors(

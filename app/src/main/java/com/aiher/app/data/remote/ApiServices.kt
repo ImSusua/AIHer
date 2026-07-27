@@ -5,6 +5,7 @@ import com.aiher.app.data.model.ChatCompletionResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -13,11 +14,14 @@ interface AIChatApi {
 
     @POST("v1/chat/completions")
     suspend fun chatCompletion(
+        @Header("Authorization") authorization: String,
         @Body request: ChatCompletionRequest
     ): Response<ChatCompletionResponse>
 
     @GET("v1/models")
-    suspend fun listModels(): Response<Map<String, Any>>
+    suspend fun listModels(
+        @Header("Authorization") authorization: String
+    ): Response<Map<String, Any>>
 }
 
 interface MarketApi {

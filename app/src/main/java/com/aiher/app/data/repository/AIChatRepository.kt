@@ -4,6 +4,7 @@ import com.aiher.app.data.local.*
 import com.aiher.app.data.model.*
 import com.aiher.app.data.remote.AIChatApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -43,19 +44,18 @@ class AIChatRepository @Inject constructor(
             }
 
             // 获取配置
-            val modelName = ""
-            val baseUrl = ""
-            val apiKey = ""
+            val apiKey = settingsDataStore.apiKey.first()
+            val modelName = settingsDataStore.modelName.first().ifBlank { "gpt-4" }
 
             // 调用API
             val request = ChatCompletionRequest(
-                model = "gpt-4",
+                model = modelName,
                 messages = apiMessages,
-                temperature = 0.7f,
-                max_tokens = 4096
+                temperature = settingsDataStore.temperature.first(),
+                max_tokens = settingsDataStore.maxTokens.first()
             )
 
-            val response = api.chatCompletion(request)
+            val response = api.chatCompletion("Bearer $apiKey", request)
 
             if (response.isSuccessful) {
                 val content = response.body()?.choices?.firstOrNull()?.message?.content ?: ""

@@ -1,6 +1,7 @@
 package com.aiher.app.ai
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
@@ -11,22 +12,35 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.aiher.app.data.local.SettingsDataStore
 import com.aiher.app.data.model.AIModel
 import com.aiher.app.ui.theme.*
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class AiSettingsActivity : ComponentActivity() {
+
+    @Inject lateinit var settingsDataStore: SettingsDataStore
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             AIHerTheme {
-                AiSettingsScreen(onBack = { finish() })
+                AiSettingsScreen(
+                    settingsDataStore = settingsDataStore,
+                    onBack = { finish() }
+                )
             }
         }
     }
@@ -34,14 +48,34 @@ class AiSettingsActivity : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AiSettingsScreen(onBack: () -> Unit) {
-    var apiKey by remember { mutableStateOf("") }
-    var baseUrl by remember { mutableStateOf("https://api.openai.com") }
-    var selectedModel by remember { mutableStateOf(AIModel.GPT4) }
-    var temperature by remember { mutableStateOf(0.7f) }
-    var maxTokens by remember { mutableStateOf("4096") }
+fun AiSettingsScreen(
+    settingsDataStore: SettingsDataStore,
+    onBack: () -> Unit
+) {
+    val scope = rememberCoroutineScope()
+    val context = LocalContext.current
+
+    var apiKey by rememberSaveable { mutableStateOf("") }
+    var baseUrl by rememberSaveable { mutableStateOf("https://api.openai.com") }
+    var selectedModel by rememberSaveable { mutableStateOf(AIModel.GPT4) }
+    var temperature by rememberSaveable { mutableStateOf(0.7f) }
+    var maxTokens by rememberSaveable { mutableStateOf("4096") }
     var showModelDropdown by remember { mutableStateOf(false) }
     var showApiKey by remember { mutableStateOf(false) }
+    var loaded by remember { mutableStateOf(false) }
+
+    // 加载已保存的设置
+    LaunchedEffect(Unit) {
+        if (!loaded) {
+            apiKey = settingsDataStore.apiKey.firstOrEmpty()
+            baseUrl = settingsDataStore.baseUrl.firstOrEmpty().ifBlank { "https://api.openai.com" }
+            val savedModel = settingsDataStore.modelName.firstOrEmpty()
+            selectedModel = AIModel.values().find { it.modelId == savedModel } ?: AIModel.GPT4
+            temperature = settingsDataStore.temperature.firstOrDefault(0.7f)
+            maxTokens = settingsDataStore.maxTokens.firstOrDefault(4096).toString()
+            loaded = true
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -64,6 +98,30 @@ fun AiSettingsScreen(onBack: () -> Unit) {
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
+            // 说明卡片
+            Card(
+                shape = RoundedCornerShape(12.dp),
+                colors = CardDefaults.cardColors(containerColor = Color(0xFFF0F0FF)),
+                elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+            ) {
+                Column(modifier = Modifier.padding(16.dp)) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(Icons.Filled.Info, null, tint = Purple500, modifier = Modifier.size(20.dp))
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text("配置说明", fontWeight = FontWeight.SemiBold, fontSize = 16.sp)
+                    }
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        "支持 OpenAI、Claude、Gemini 等兼容API。\n" +
+                        "如果使用第三方代理，请填写对应的 Base URL。\n" +
+                        "不填写API Key也可以使用内置的本地回复功能。",
+                        fontSize = 13.sp,
+                        color = TextSecondary,
+                        lineHeight = 20.sp
+                    )
+                }
+            }
+
             // API Key
             Card(
                 shape = RoundedCornerShape(12.dp),
@@ -77,7 +135,7 @@ fun AiSettingsScreen(onBack: () -> Unit) {
                         value = apiKey,
                         onValueChange = { apiKey = it },
                         modifier = Modifier.fillMaxWidth(),
-                        placeholder = { Text("输入 API Key") },
+                        placeholder = { Text("输入 API Key（可选）") },
                         shape = RoundedCornerShape(8.dp),
                         singleLine = true,
                         visualTransformation = if (!showApiKey) {
@@ -201,7 +259,17 @@ fun AiSettingsScreen(onBack: () -> Unit) {
 
             // 保存按钮
             Button(
-                onClick = { onBack() },
+                onClick = {
+                    scope.launch {
+                        settingsDataStore.saveApiKey(apiKey.trim())
+                        settingsDataStore.saveBaseUrl(baseUrl.trim())
+                        settingsDataStore.saveModelName(selectedModel.modelId)
+                        settingsDataStore.saveTemperature(temperature)
+                        settingsDataStore.saveMaxTokens(maxTokens.toIntOrNull() ?: 4096)
+                        Toast.makeText(context, "配置已保存", Toast.LENGTH_SHORT).show()
+                        onBack()
+                    }
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(50.dp),
@@ -216,4 +284,17 @@ fun AiSettingsScreen(onBack: () -> Unit) {
             Spacer(modifier = Modifier.height(16.dp))
         }
     }
+}
+
+// 辅助扩展函数 - 安全获取第一个值
+suspend fun kotlinx.coroutines.flow.Flow<String>.firstOrEmpty(): String {
+    return try { this.first() } catch (e: Exception) { "" }
+}
+
+suspend fun kotlinx.coroutines.flow.Flow<Float>.firstOrDefault(default: Float): Float {
+    return try { this.first() } catch (e: Exception) { default }
+}
+
+suspend fun kotlinx.coroutines.flow.Flow<Int>.firstOrDefault(default: Int): Int {
+    return try { this.first() } catch (e: Exception) { default }
 }

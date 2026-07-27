@@ -2,6 +2,7 @@ package com.aiher.app.ai
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.*
@@ -22,23 +23,34 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.aiher.app.data.model.ChatMessage
 import com.aiher.app.data.model.MessageRole
+import com.aiher.app.data.repository.AIChatRepository
+import com.aiher.app.data.local.SettingsDataStore
 import com.aiher.app.ui.theme.*
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class AiTextChatActivity : ComponentActivity() {
+
+    @Inject lateinit var repository: AIChatRepository
+    @Inject lateinit var settingsDataStore: SettingsDataStore
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             AIHerTheme {
                 AiChatScreen(
+                    repository = repository,
+                    settingsDataStore = settingsDataStore,
                     onNavigateToSettings = {
                         startActivity(Intent(this, AiSettingsActivity::class.java))
                     },
@@ -75,6 +87,8 @@ class AiTextChatActivity : ComponentActivity() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AiChatScreen(
+    repository: AIChatRepository,
+    settingsDataStore: SettingsDataStore,
     onNavigateToSettings: () -> Unit,
     onNavigateToUserSettings: () -> Unit,
     onNavigateToFeatureStore: () -> Unit,
@@ -201,6 +215,7 @@ fun AiChatScreen(
                                 content = inputText
                             )
                             messages = messages + userMessage
+                            val currentInput = inputText
                             inputText = ""
                             isGenerating = true
 
@@ -208,14 +223,41 @@ fun AiChatScreen(
                                 // 自动滚动到底部
                                 listState.animateScrollToItem(messages.size)
 
-                                // 模拟AI响应
-                                kotlinx.coroutines.delay(2000)
+                                try {
+                                    // 获取API Key
+                                    val apiKey = settingsDataStore.apiKey.first()
+                                    val projectId = "local_chat"
 
-                                val aiResponse = generateMockResponse(userMessage.content)
-                                messages = messages + ChatMessage(
-                                    role = MessageRole.ASSISTANT,
-                                    content = aiResponse
-                                )
+                                    if (apiKey.isNotBlank()) {
+                                        // 使用真实API
+                                        val result = repository.sendMessage(projectId, currentInput)
+                                        val aiResponse = result.fold(
+                                            onSuccess = { msg -> msg.content },
+                                            onFailure = { e ->
+                                                "API调用失败: ${e.message}\n\n请检查API Key和网络连接。\n你可以在「AI 配置」中设置API Key。"
+                                            }
+                                        )
+                                        messages = messages + ChatMessage(
+                                            role = MessageRole.ASSISTANT,
+                                            content = aiResponse
+                                        )
+                                    } else {
+                                        // 没有API Key时使用本地响应
+                                        kotlinx.coroutines.delay(1000)
+                                        val aiResponse = generateMockResponse(currentInput)
+                                        val hint = "\n\n💡 提示：在「AI 配置」中设置API Key以使用真实AI模型。"
+                                        messages = messages + ChatMessage(
+                                            role = MessageRole.ASSISTANT,
+                                            content = aiResponse + hint
+                                        )
+                                    }
+                                } catch (e: Exception) {
+                                    messages = messages + ChatMessage(
+                                        role = MessageRole.ASSISTANT,
+                                        content = "发生错误: ${e.message}\n\n请重试或检查设置。"
+                                    )
+                                }
+
                                 isGenerating = false
                                 listState.animateScrollToItem(messages.size)
                             }

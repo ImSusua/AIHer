@@ -88,7 +88,11 @@ fun UserSettingsScreen(onBack: () -> Unit) {
                     Spacer(modifier = Modifier.width(16.dp))
                     Column {
                         Text("AIHer 用户", fontWeight = FontWeight.SemiBold, fontSize = 18.sp)
-                        Text("免费版", fontSize = 14.sp, color = TextSecondary)
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(Icons.Filled.Verified, null, tint = SuccessGreen, modifier = Modifier.size(14.dp))
+                            Spacer(modifier = Modifier.width(4.dp))
+                            Text("Pro 版 · 永久免费", fontSize = 14.sp, color = SuccessGreen, fontWeight = FontWeight.Medium)
+                        }
                     }
                 }
             }

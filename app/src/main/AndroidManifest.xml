@@ -187,6 +187,34 @@
             android:label="项目详情"
             android:theme="@style/Theme.AIHer" />
 
+        <!-- MCP / Skill 管理 -->
+        <activity
+            android:name=".mcp.McpManagerActivity"
+            android:exported="false"
+            android:label="MCP / Skill"
+            android:theme="@style/Theme.AIHer" />
+
+        <!-- Web App 生成 -->
+        <activity
+            android:name=".webapp.WebAppActivity"
+            android:exported="false"
+            android:label="Web App"
+            android:theme="@style/Theme.AIHer" />
+
+        <!-- 终端 -->
+        <activity
+            android:name=".terminal.TerminalActivity"
+            android:exported="false"
+            android:label="Terminal"
+            android:theme="@style/Theme.AIHer" />
+
+        <!-- 桌面扩展 -->
+        <activity
+            android:name=".desktop.DesktopExtensionActivity"
+            android:exported="false"
+            android:label="桌面扩展"
+            android:theme="@style/Theme.AIHer" />
+
         <!-- 文件提供者 - 用于APK安装 -->
         <provider
             android:name="androidx.core.content.FileProvider"

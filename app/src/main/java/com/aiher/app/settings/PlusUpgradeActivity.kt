@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -43,7 +42,7 @@ fun PlusUpgradeScreen(onBack: () -> Unit) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("升级 Plus", color = TextOnPrimary, fontWeight = FontWeight.Bold) },
+                title = { Text("Pro 会员", color = TextOnPrimary, fontWeight = FontWeight.Bold) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(Icons.Filled.ArrowBack, "返回", tint = TextOnPrimary)
@@ -62,7 +61,7 @@ fun PlusUpgradeScreen(onBack: () -> Unit) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            // Plus 头部
+            // Pro 头部 - 全部免费
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp),
@@ -73,7 +72,7 @@ fun PlusUpgradeScreen(onBack: () -> Unit) {
                         .fillMaxWidth()
                         .background(
                             Brush.linearGradient(
-                                colors = listOf(Purple500, Color(0xFF8B5CF6), Color(0xFFEC4899))
+                                colors = listOf(SuccessGreen, Color(0xFF00B894), Color(0xFF55EFC4))
                             ),
                             shape = RoundedCornerShape(16.dp)
                         )
@@ -82,129 +81,107 @@ fun PlusUpgradeScreen(onBack: () -> Unit) {
                 ) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Icon(
-                            Icons.Filled.Star,
+                            Icons.Filled.Verified,
                             null,
-                            tint = PlusGold,
-                            modifier = Modifier.size(48.dp)
+                            tint = Color.White,
+                            modifier = Modifier.size(56.dp)
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
-                            "AIHer Plus",
-                            fontSize = 28.sp,
+                            "AIHer Pro",
+                            fontSize = 32.sp,
                             fontWeight = FontWeight.Bold,
-                            color = TextOnPrimary
+                            color = Color.White
                         )
                         Spacer(modifier = Modifier.height(4.dp))
                         Text(
-                            "解锁无限可能",
-                            fontSize = 16.sp,
-                            color = TextOnPrimary.copy(alpha = 0.8f)
+                            "全部功能 · 永久免费",
+                            fontSize = 18.sp,
+                            color = Color.White.copy(alpha = 0.9f),
+                            fontWeight = FontWeight.Medium
+                        )
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Text(
+                            "已为你解锁所有功能",
+                            fontSize = 14.sp,
+                            color = Color.White.copy(alpha = 0.7f)
                         )
                     }
                 }
             }
 
-            // 价格方案
-            Row(
+            // 已解锁状态卡片
+            Card(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
+                shape = RoundedCornerShape(12.dp),
+                colors = CardDefaults.cardColors(containerColor = SurfaceLight),
+                elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
             ) {
-                // 月度方案
-                Card(
-                    modifier = Modifier.weight(1f),
-                    shape = RoundedCornerShape(12.dp),
-                    colors = CardDefaults.cardColors(containerColor = SurfaceLight),
-                    elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(20.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
                 ) {
-                    Column(
-                        modifier = Modifier.padding(16.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Text("月度", fontSize = 18.sp, fontWeight = FontWeight.SemiBold)
-                        Spacer(modifier = Modifier.height(4.dp))
-                        Text("¥29.9", fontSize = 28.sp, fontWeight = FontWeight.Bold, color = Purple500)
-                        Text("/月", fontSize = 13.sp, color = TextSecondary)
-                    }
-                }
-
-                // 年度方案
-                Card(
-                    modifier = Modifier.weight(1f),
-                    shape = RoundedCornerShape(12.dp),
-                    colors = CardDefaults.cardColors(containerColor = SurfaceLight),
-                    elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
-                ) {
-                    Column(
-                        modifier = Modifier.padding(16.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Text("年度", fontSize = 18.sp, fontWeight = FontWeight.SemiBold)
-                            Spacer(modifier = Modifier.width(4.dp))
-                            Box(
-                                modifier = Modifier
-                                    .clip(RoundedCornerShape(4.dp))
-                                    .background(SuccessGreen)
-                                    .padding(horizontal = 4.dp, vertical = 2.dp)
-                            ) {
-                                Text("推荐", fontSize = 10.sp, color = TextOnPrimary)
-                            }
-                        }
-                        Spacer(modifier = Modifier.height(4.dp))
-                        Text("¥199", fontSize = 28.sp, fontWeight = FontWeight.Bold, color = Purple500)
-                        Text("/年", fontSize = 13.sp, color = TextSecondary)
-                        Text("省 ¥160", fontSize = 12.sp, color = SuccessGreen)
+                    Icon(
+                        Icons.Filled.CheckCircle,
+                        null,
+                        tint = SuccessGreen,
+                        modifier = Modifier.size(32.dp)
+                    )
+                    Spacer(modifier = Modifier.width(12.dp))
+                    Column {
+                        Text(
+                            "Pro 会员已激活",
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = SuccessGreen
+                        )
+                        Text(
+                            "到期时间：永久有效",
+                            fontSize = 13.sp,
+                            color = TextSecondary
+                        )
                     }
                 }
             }
 
-            // 功能列表
+            // 全部功能列表
             Card(
                 shape = RoundedCornerShape(12.dp),
                 colors = CardDefaults.cardColors(containerColor = SurfaceLight),
                 elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
-                    Text("Plus 专属功能", fontWeight = FontWeight.SemiBold, fontSize = 18.sp)
+                    Text("已解锁全部功能", fontWeight = FontWeight.SemiBold, fontSize = 18.sp)
                     Spacer(modifier = Modifier.height(12.dp))
 
                     PlusFeature("无限次应用生成", "无限制创建各类Android应用")
                     PlusFeature("优先队列", "生成请求优先处理，速度提升50%")
-                    PlusFeature("高级AI模型", "使用GPT-4、Claude等顶级模型")
+                    PlusFeature("高级AI模型", "使用GPT-4、Claude、Gemini等顶级模型")
                     PlusFeature("代码导出", "导出完整Android项目源代码")
                     PlusFeature("APK签名", "自动签名生成的APK文件")
                     PlusFeature("云端存储", "项目云端备份和跨设备同步")
                     PlusFeature("高级模板", "使用专业应用模板快速生成")
                     PlusFeature("去广告", "纯净体验，无任何广告")
+                    PlusFeature("MCP / Skill", "管理MCP Server和自定义技能")
+                    PlusFeature("Web App 生成", "生成可在手机运行的Web应用")
+                    PlusFeature("桌面扩展工作区", "连接桌面环境处理跨端任务")
+                    PlusFeature("终端环境", "Shell、CLI工具纳入执行流程")
+                    PlusFeature("Android 原生能力", "定位、剪贴板、悬浮窗、系统服务")
+                    PlusFeature("项目导入", "从空项目、本地目录或仓库链接导入")
                 }
             }
 
-            // 升级按钮
-            Button(
-                onClick = {},
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(56.dp),
-                shape = RoundedCornerShape(16.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = PlusGold
-                )
-            ) {
-                Icon(Icons.Filled.Star, null, tint = Color(0xFF5A4BD1))
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(
-                    "立即升级 Plus",
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color(0xFF5A4BD1)
-                )
-            }
+            Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                "随时可取消，自动续费",
-                fontSize = 12.sp,
+                "AIHer - 让每个人都能免费创建应用",
+                fontSize = 14.sp,
                 color = TextSecondary,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
+                fontWeight = FontWeight.Medium
             )
 
             Spacer(modifier = Modifier.height(16.dp))

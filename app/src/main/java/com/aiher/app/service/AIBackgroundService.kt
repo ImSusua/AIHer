@@ -12,7 +12,9 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class AIBackgroundService : Service() {
 
-    @Inject lateinit var notificationManager: NotificationManager
+    private val notificationManager: NotificationManager by lazy {
+        getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+    }
 
     companion object {
         const val CHANNEL_ID = "aiher_background"

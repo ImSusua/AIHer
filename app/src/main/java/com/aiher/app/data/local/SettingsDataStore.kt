@@ -36,7 +36,7 @@ class SettingsDataStore(private val context: Context) {
     val isLoggedIn: Flow<Boolean> = context.dataStore.data.map { it[KEY_IS_LOGGED_IN] ?: false }
     val userId: Flow<String> = context.dataStore.data.map { it[KEY_USER_ID] ?: "" }
     val userName: Flow<String> = context.dataStore.data.map { it[KEY_USER_NAME] ?: "" }
-    val isPlus: Flow<Boolean> = context.dataStore.data.map { it[KEY_IS_PLUS] ?: false }
+    val isPlus: Flow<Boolean> = context.dataStore.data.map { it[KEY_IS_PLUS] ?: true }
 
     // 应用设置
     val themeMode: Flow<Int> = context.dataStore.data.map { it[KEY_THEME_MODE] ?: 0 }

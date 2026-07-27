@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.aiher.app.ui.theme.*
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class AuthGateActivity : ComponentActivity() {
@@ -189,10 +190,4 @@ fun AuthGateScreen(
             }
         }
     }
-}
-
-private fun kotlinx.coroutines.CoroutineScope.launch(
-    block: suspend kotlinx.coroutines.CoroutineScope.() -> Unit
-): kotlinx.coroutines.Job {
-    return kotlinx.coroutines.launch(block = block)
 }

@@ -1,0 +1,24 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    
+    <!-- AI text represented as stylized shapes -->
+    <group
+        android:scaleX="0.6"
+        android:scaleY="0.6"
+        android:translateX="21.6"
+        android:translateY="21.6">
+        
+        <!-- A shape -->
+        <path
+            android:fillColor="#FFFFFF"
+            android:pathData="M30,20 L50,20 L60,70 L50,70 L47,55 L33,55 L30,70 L20,70 Z M35,45 L45,45 L40,30 Z" />
+        
+        <!-- I shape -->
+        <path
+            android:fillColor="#FFFFFF"
+            android:pathData="M70,20 L80,20 L80,70 L70,70 Z" />
+    </group>
+</vector>

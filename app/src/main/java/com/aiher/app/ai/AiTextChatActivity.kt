@@ -50,6 +50,21 @@ class AiTextChatActivity : ComponentActivity() {
                     },
                     onNavigateToPlus = {
                         startActivity(Intent(this, com.aiher.app.settings.PlusUpgradeActivity::class.java))
+                    },
+                    onNavigateToMcp = {
+                        startActivity(Intent(this, com.aiher.app.mcp.McpManagerActivity::class.java))
+                    },
+                    onNavigateToWebApp = {
+                        startActivity(Intent(this, com.aiher.app.webapp.WebAppActivity::class.java))
+                    },
+                    onNavigateToTerminal = {
+                        startActivity(Intent(this, com.aiher.app.terminal.TerminalActivity::class.java))
+                    },
+                    onNavigateToDesktop = {
+                        startActivity(Intent(this, com.aiher.app.desktop.DesktopExtensionActivity::class.java))
+                    },
+                    onNavigateToProjects = {
+                        startActivity(Intent(this, com.aiher.app.project.ProjectDetailActivity::class.java))
                     }
                 )
             }
@@ -63,7 +78,12 @@ fun AiChatScreen(
     onNavigateToSettings: () -> Unit,
     onNavigateToUserSettings: () -> Unit,
     onNavigateToFeatureStore: () -> Unit,
-    onNavigateToPlus: () -> Unit
+    onNavigateToPlus: () -> Unit,
+    onNavigateToMcp: () -> Unit,
+    onNavigateToWebApp: () -> Unit,
+    onNavigateToTerminal: () -> Unit,
+    onNavigateToDesktop: () -> Unit,
+    onNavigateToProjects: () -> Unit
 ) {
     var messages by remember { mutableStateOf(listOf<ChatMessage>()) }
     var inputText by remember { mutableStateOf("") }
@@ -91,6 +111,11 @@ fun AiChatScreen(
                     onNavigateToUserSettings = onNavigateToUserSettings,
                     onNavigateToFeatureStore = onNavigateToFeatureStore,
                     onNavigateToPlus = onNavigateToPlus,
+                    onNavigateToMcp = onNavigateToMcp,
+                    onNavigateToWebApp = onNavigateToWebApp,
+                    onNavigateToTerminal = onNavigateToTerminal,
+                    onNavigateToDesktop = onNavigateToDesktop,
+                    onNavigateToProjects = onNavigateToProjects,
                     onClose = { showSideMenu = false }
                 )
             }
@@ -362,6 +387,11 @@ fun SideMenuContent(
     onNavigateToUserSettings: () -> Unit,
     onNavigateToFeatureStore: () -> Unit,
     onNavigateToPlus: () -> Unit,
+    onNavigateToMcp: () -> Unit,
+    onNavigateToWebApp: () -> Unit,
+    onNavigateToTerminal: () -> Unit,
+    onNavigateToDesktop: () -> Unit,
+    onNavigateToProjects: () -> Unit,
     onClose: () -> Unit
 ) {
     ModalDrawerSheet(
@@ -370,7 +400,7 @@ fun SideMenuContent(
     ) {
         Spacer(modifier = Modifier.height(24.dp))
 
-        // 用户信息
+        // 用户信息 - Pro版
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -381,30 +411,51 @@ fun SideMenuContent(
                 modifier = Modifier
                     .size(48.dp)
                     .clip(CircleShape)
-                    .background(Purple500),
+                    .background(
+                        androidx.compose.ui.graphics.Brush.linearGradient(
+                            listOf(SuccessGreen, Color(0xFF00B894))
+                        )
+                    ),
                 contentAlignment = Alignment.Center
             ) {
-                Icon(Icons.Filled.Person, null, tint = TextOnPrimary, modifier = Modifier.size(28.dp))
+                Icon(Icons.Filled.Person, null, tint = Color.White, modifier = Modifier.size(28.dp))
             }
             Spacer(modifier = Modifier.width(12.dp))
             Column {
                 Text("AIHer 用户", fontWeight = FontWeight.SemiBold, fontSize = 16.sp)
-                Text("免费版", fontSize = 13.sp, color = TextSecondary)
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(Icons.Filled.Verified, null, tint = SuccessGreen, modifier = Modifier.size(12.dp))
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text("Pro 版 · 永久免费", fontSize = 13.sp, color = SuccessGreen, fontWeight = FontWeight.Medium)
+                }
             }
         }
 
-        HorizontalDivider(modifier = Modifier.padding(horizontal = 20.dp))
+        Divider(modifier = Modifier.padding(horizontal = 20.dp))
         Spacer(modifier = Modifier.height(8.dp))
 
-        // 菜单项
-        MenuItem(Icons.Outlined.Star, "升级 Plus", "解锁更多功能") { onNavigateToPlus(); onClose() }
-        MenuItem(Icons.Outlined.Store, "功能商店", "浏览和安装应用") { onNavigateToFeatureStore(); onClose() }
+        // 核心功能
+        MenuItem(Icons.Outlined.Folder, "我的项目", "查看和安装生成的应用") { onNavigateToProjects(); onClose() }
+        MenuItem(Icons.Outlined.Store, "功能商店", "浏览和安装社区应用") { onNavigateToFeatureStore(); onClose() }
+        MenuItem(Icons.Outlined.Web, "Web App", "生成和预览Web应用") { onNavigateToWebApp(); onClose() }
+        MenuItem(Icons.Outlined.Verified, "Pro 会员", "全部功能已解锁") { onNavigateToPlus(); onClose() }
+
+        Divider(modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp))
+
+        // 高级功能
+        MenuItem(Icons.Outlined.Dns, "MCP / Skill", "管理工具和技能") { onNavigateToMcp(); onClose() }
+        MenuItem(Icons.Outlined.Terminal, "终端", "Shell 和 CLI 工具") { onNavigateToTerminal(); onClose() }
+        MenuItem(Icons.Outlined.DesktopWindows, "桌面扩展", "连接Mac工作区") { onNavigateToDesktop(); onClose() }
+
+        Divider(modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp))
+
+        // 设置
         MenuItem(Icons.Outlined.Settings, "AI 配置", "设置AI模型和参数") { onNavigateToSettings(); onClose() }
         MenuItem(Icons.Outlined.Person, "用户设置", "管理账户和偏好") { onNavigateToUserSettings(); onClose() }
 
-        HorizontalDivider(modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp))
+        Divider(modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp))
 
-        MenuItem(Icons.Outlined.Info, "关于", "版本 1.0.0") {}
+        MenuItem(Icons.Outlined.Info, "关于", "AIHer v1.0.0 · 免费") {}
     }
 }
 

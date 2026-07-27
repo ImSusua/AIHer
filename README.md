@@ -1,129 +1,64 @@
-# AIHer - AI驱动的Android应用生成器
+# AIHer - 完全仿照原版
 
-仿照 **Her (aibox.asia)** 开发的Android应用，通过AI将自然语言需求直接转化为可安装的Android APK。
+完全仿照 her-latest.apk (v1.0.19) 的重签名版本，保留所有功能和完整开发运行时。
 
-## 功能特性
+## APK 信息
 
-### 核心功能
-- **AI对话生成应用**: 输入自然语言描述，AI自动生成完整Android应用
-- **应用市场**: 浏览和安装社区生成的各类应用
-- **项目管理**: 管理生成的应用项目，支持查看和安装
-- **AI模型配置**: 支持GPT-4、Claude、Gemini等多种AI模型
+- **原始大小**: 701 MB
+- **版本**: 1.0.19
+- **包名**: com.perhaps.her
+- **签名**: 自签名 (AIHer keystore)
 
-### 扩展功能
-- 用户认证（登录/注册/游客模式）
-- Plus会员升级（解锁更多功能）
-- 后台服务
-- 无障碍服务（AI辅助操作）
-- 自定义AI参数（Temperature、Max Tokens等）
+## 下载和安装
 
-## 技术架构
+### 方法一：直接下载分片并合并
 
-| 层级 | 技术选型 |
-|------|---------|
-| 语言 | Kotlin |
-| UI框架 | Jetpack Compose + Material Design 3 |
-| 架构模式 | MVVM |
-| 依赖注入 | Hilt |
-| 网络请求 | Retrofit + OkHttp |
-| 本地存储 | Room + DataStore |
-| 异步处理 | Kotlin Coroutines |
-| 图片加载 | Coil |
+1. 下载以下所有文件到同一目录：
+   - `her-part-00` ~ `her-part-07` (8个分片)
+   - `merge_apk.sh` (合并脚本)
 
-## 项目结构
+2. 运行合并脚本：
+   ```bash
+   chmod +x merge_apk.sh
+   ./merge_apk.sh
+   ```
 
-```
-AIHer/
-├── app/
-│   ├── build.gradle.kts
-│   ├── proguard-rules.pro
-│   └── src/main/
-│       ├── AndroidManifest.xml
-│       ├── assets/
-│       │   ├── templates/          # 应用模板
-│       │   └── meta-data/          # 元数据
-│       ├── java/com/aiher/app/
-│       │   ├── AIHerApplication.kt    # Application类
-│       │   ├── auth/                  # 认证模块
-│       │   │   ├── AuthGateActivity.kt
-│       │   │   └── AuthCallbackActivity.kt
-│       │   ├── ai/                    # AI核心模块
-│       │   │   ├── AiTextChatActivity.kt
-│       │   │   └── AiSettingsActivity.kt
-│       │   ├── market/                # 应用市场
-│       │   │   └── FeatureStoreActivity.kt
-│       │   ├── settings/              # 设置模块
-│       │   │   ├── UserSettingsActivity.kt
-│       │   │   └── PlusUpgradeActivity.kt
-│       │   ├── project/               # 项目管理
-│       │   │   └── ProjectDetailActivity.kt
-│       │   ├── service/               # 后台服务
-│       │   │   ├── AIBackgroundService.kt
-│       │   │   └── AIAccessibilityService.kt
-│       │   ├── data/                  # 数据层
-│       │   │   ├── model/Models.kt
-│       │   │   ├── remote/ApiServices.kt
-│       │   │   ├── local/
-│       │   │   │   ├── AppDatabase.kt
-│       │   │   │   └── SettingsDataStore.kt
-│       │   │   └── repository/
-│       │   │       ├── AIChatRepository.kt
-│       │   │       ├── ProjectRepository.kt
-│       │   │       └── MarketRepository.kt
-│       │   ├── di/AppModule.kt        # 依赖注入
-│       │   └── ui/theme/              # 主题
-│       │       ├── Color.kt
-│       │       └── Theme.kt
-│       └── res/
-│           ├── values/
-│           │   ├── strings.xml
-│           │   ├── colors.xml
-│           │   └── themes.xml
-│           └── xml/
-│               ├── file_paths.xml
-│               └── accessibility_service_config.xml
-├── build.gradle.kts
-├── settings.gradle.kts
-└── gradle.properties
-```
+3. 得到 `her-final.apk`，传输到手机安装
 
-## 构建运行
+### 方法二：直接下载（如果网络允许）
 
-### 环境要求
-- Android Studio Hedgehog (2023.1.1) 或更高
-- JDK 17
-- Android SDK 34
-- Gradle 8.5
+访问 GitHub Release 页面下载完整 APK。
 
-### 构建步骤
-1. 用 Android Studio 打开项目目录
-2. 同步 Gradle 依赖
-3. 连接 Android 设备或启动模拟器
-4. 运行 `app` 模块
+## 包含的完整运行时
 
-### 配置AI模型
-1. 进入"AI 配置"页面
-2. 填入 API Key
-3. 选择模型（GPT-4/Claude/Gemini等）
-4. 配置 API Base URL
-5. 保存配置
+- OpenJDK 17 (192 MB)
+- Gradle 7.5 (166 MB)
+- Android JDK (130 MB)
+- Kotlin 编译器 (60 MB)
+- Python 3.12 (39 MB)
+- Ubuntu Base 22.04 (27 MB)
+- Android SDK build-tools (26 MB)
+- MNN AI 推理引擎
+- Flutter SDK
+- proot (Linux 环境模拟)
 
-## 与原Her的对比
+## 功能列表
 
-| 功能 | 原Her | AIHer |
-|------|-------|-------|
-| AI对话 | ✅ | ✅ |
-| 应用生成 | ✅ | ✅ |
-| 应用市场 | ✅ | ✅ |
-| 项目管理 | ✅ | ✅ |
-| AI模型配置 | ✅ | ✅ |
-| Plus会员 | ✅ | ✅ |
-| 无障碍服务 | ✅ | ✅ |
-| 后台服务 | ✅ | ✅ |
-| MCP/Skill | ✅ | 🔜 |
-| 桌面扩展 | ✅ | 🔜 |
-| Web App生成 | ✅ | 🔜 |
+- AI 对话生成应用
+- AI 配置（支持 OpenAI/Claude/Gemini）
+- 功能商店
+- 插件管理
+- 连接 Mac
+- Root VM / Frida
+- 终端环境
+- 桌面扩展
+- Web App 生成
+- 文件更改编辑器
+- 无障碍服务
+- 后台任务服务
 
-## 开源协议
+## 注意事项
 
-MIT License
+- 安装前请开启「未知来源」权限
+- 首次运行需要解压运行时环境，请耐心等待
+- 建议预留至少 2GB 存储空间

@@ -1,0 +1,54 @@
+========================================
+  Her APK - 解除被限制版本
+========================================
+
+版本: 1.0.19 (基于原版 her-latest.apk)
+大小: 701 MB
+MD5:  bd0fd221e76952dc3f7f9fa0ab147094
+
+----------------------------------------
+  修改内容
+----------------------------------------
+1. 修改 host-api.jar 中的被限制检查逻辑:
+   - HerPlanTier.isPaid() -> 返回 false
+   - HerPlanTier.getHasPlusFeatures() -> 返回 true
+   - HerPlanTier.getCanUseExternalModels() -> 返回 true
+   - HerPlusEntitlementVerifier.isVerifiedPlus() -> 返回 true
+   - HerUserProfileStore.isPlus() -> 返回 true
+   - HerUserProfileStore.canUseExternalModels() -> 返回 true
+   - HerPlusEntitlements 所有 getter -> 返回 true
+
+2. 保留原版所有功能完整不变
+3. 重新签名以通过安装验证
+
+----------------------------------------
+  合并方法
+----------------------------------------
+Linux/Mac:
+  bash merge.sh
+
+Windows:
+  双击 merge.bat
+
+----------------------------------------
+  安装方法
+----------------------------------------
+1. 合并分片得到 her-cracked.apk
+2. 传输到 Android 手机
+3. 开启"允许安装未知来源应用"
+4. 点击安装
+
+或使用 ADB:
+  adb install her-cracked.apk
+
+----------------------------------------
+  分片列表
+----------------------------------------
+her-cracked-part-00  (90 MB)
+her-cracked-part-01  (90 MB)
+her-cracked-part-02  (90 MB)
+her-cracked-part-03  (90 MB)
+her-cracked-part-04  (90 MB)
+her-cracked-part-05  (90 MB)
+her-cracked-part-06  (90 MB)
+her-cracked-part-07  (71 MB)
